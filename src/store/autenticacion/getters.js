@@ -46,3 +46,7 @@ export function getCelularReg (state) {
 export function getTipo_UsuarioReg (state) {
     return state.tipo_usuario;
 }
+//Datos de la tabla
+export function getRows (state) {
+    return state.rows;
+}

@@ -47,6 +47,10 @@ export function setCelularReg({ commit }, valor) {
 export function setTipo_UsuarioReg({ commit }, valor) {
   commit("SET_TIPOUSUARIO", valor);
 }
+//Datos Tabla
+export function setRows({ commit }, valor) {
+  commit("SET_ROWS", valor);
+}
 
 import axios from "axios";
 import { Notify } from "quasar";
@@ -170,6 +174,29 @@ export async function obtenerDatosUsuario() {
   })
     .then(async function (response) {
       console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+export async function actualizarTabla({ commit }) {
+  console.log("actions actualizar");
+  let url = this.getters["autenticacion/getIp"] + "campeonato";
+  let usuario = this.getters["autenticacion/getUsuarioLogeado"];
+  await axios({
+    method: "post",
+    url: url,
+    data: {
+      user: usuario.user,
+    },
+    headers: {
+      Authorization: "Bearer " + this.getters["autenticacion/getToken"].access_token,
+    },
+  })
+    .then(function (response) {
+      console.log(response.data);
+      commit("SET_ROWS", response.data);
     })
     .catch(function (error) {
       console.log(error);

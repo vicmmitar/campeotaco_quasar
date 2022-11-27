@@ -41,8 +41,8 @@ export default {
   },
   created() {
     if(this.logeado){
-      const $q = useQuasar();
-      $q.notify({
+      const q = useQuasar();
+      q.notify({
           message: 'Usted ya inicio sesion',
           color: 'blue',
         })

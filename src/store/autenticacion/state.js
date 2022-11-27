@@ -1,6 +1,6 @@
 export default function () {
   return {
-    ip: 'http://192.168.1.11:8000/api/',
+    ip: 'http://192.168.1.7:8000/api/',
     logeado: false,
     token: null,
     usuarioLogeado: null,
@@ -17,5 +17,6 @@ export default function () {
     ciReg: "",
     celularReg: "",
     tipo_usuario: "",
+    rows: [],
   }
 }

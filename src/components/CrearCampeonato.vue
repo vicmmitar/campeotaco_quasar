@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md" style="max-width: 400px">
+  <q-card class="my-card">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
       <q-input
         filled
@@ -25,7 +25,9 @@
 
       <q-input filled v-model="sede" label="Sede" hint="Sede del campeonato" />
 
-      <div>
+      <q-separator />
+
+      <q-card-actions align="around">
         <q-btn label="Crear" type="submit" color="primary" />
         <q-btn
           label="Reiniciar"
@@ -34,9 +36,9 @@
           flat
           class="q-ml-sm"
         />
-      </div>
+      </q-card-actions>
     </q-form>
-  </div>
+  </q-card>
 </template>
 
 <script>
@@ -46,7 +48,7 @@ import axios from "axios";
 
 export default {
   setup() {
-    const $q = useQuasar();
+    const q = useQuasar();
 
     const nombre = ref(null);
     const gestion = ref(null);
@@ -58,7 +60,7 @@ export default {
       gestion,
       categoria,
       sede,
-      $q,
+      q,
       options: ["Damas", "Varones", "Senior", "Niños"],
     };
   },
@@ -79,11 +81,19 @@ export default {
         return this.$store.dispatch("autenticacion/setIp", valor);
       },
     },
+    usuarioLogeado: {
+      get() {
+        return this.$store.getters["autenticacion/getUsuarioLogeado"];
+      },
+      set(valor) {
+        return this.$store.dispatch("autenticacion/setUsuarioLogeado", valor);
+      },
+    },
   },
   methods: {
     async onSubmit() {
       if (this.nombre == null) {
-        this.$q.notify({
+        this.q.notify({
           color: "red-5",
           textColor: "white",
           icon: "warning",
@@ -96,6 +106,7 @@ export default {
           gestion: this.gestion,
           categoria: this.categoria,
           sede: this.sede,
+          user: this.usuarioLogeado.user,
         };
         await axios({
           method: "post",

@@ -6,7 +6,7 @@
           <q-avatar>
             <img src="../assets/copa_fut.png" alt="icono" />
           </q-avatar>
-          <q-btn flat label="Campeotaco" />
+          <q-btn flat label="Campeotaco" to="/" />
         </q-toolbar-title>
 
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
@@ -14,14 +14,24 @@
     </q-header>
 
     <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
+      
       <q-scroll-area v-if="logeado" style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
         <q-list padding>
+
           <q-item @click="doLogout" clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="logout" />
             </q-item-section>
             <q-item-section> Cerrar session </q-item-section>
           </q-item>
+
+          <q-item to="gestioncampeonatos" clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="logout" />
+            </q-item-section>
+            <q-item-section> Gestionar campeonatos </q-item-section>
+          </q-item>
+
         </q-list>
       </q-scroll-area>
 

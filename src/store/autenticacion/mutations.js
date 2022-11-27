@@ -47,3 +47,7 @@ export function SET_CELULARREG (state, nuevoValor) {
 export function SET_TIPOUSUARIO (state, nuevoValor) {
     state.tipo_usuario = nuevoValor;
 }
+//Datos de la tabala
+export function SET_ROWS (state, nuevoValor) {
+    state.rows = nuevoValor;
+}

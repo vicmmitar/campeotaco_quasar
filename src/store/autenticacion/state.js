@@ -17,6 +17,12 @@ export default function () {
     ciReg: "",
     celularReg: "",
     tipo_usuario: "",
+    //tabla campeonatos
     rows: [],
+    seleccionado: [],
+    //tabla equipos
+    idCampGest: "",
+    rowsE: [],
+    seleccionadoE: [],
   }
 }

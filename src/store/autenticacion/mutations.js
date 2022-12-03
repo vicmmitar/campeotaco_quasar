@@ -47,7 +47,20 @@ export function SET_CELULARREG (state, nuevoValor) {
 export function SET_TIPOUSUARIO (state, nuevoValor) {
     state.tipo_usuario = nuevoValor;
 }
-//Datos de la tabala
+//Datos de la tabla Campeonatos
 export function SET_ROWS (state, nuevoValor) {
     state.rows = nuevoValor;
+}
+export function SET_SELECCIONADO (state, nuevoValor) {
+    state.seleccionado = nuevoValor;
+}
+//Datos de la tabla Equipos
+export function SET_IDCAMPGEST (state, nuevoValor) {
+    state.idCampGest = nuevoValor;
+}
+export function SET_ROWSE (state, nuevoValor) {
+    state.rowsE = nuevoValor;
+}
+export function SET_SELECCIONADOE (state, nuevoValor) {
+    state.seleccionadoE = nuevoValor;
 }

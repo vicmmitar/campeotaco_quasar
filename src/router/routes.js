@@ -5,7 +5,8 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: 'gestioncampeonatos', component: () => import('pages/GestionCampeonatos.vue') }
+      { path: 'gestioncampeonatos', component: () => import('pages/GestionCampeonatos.vue') },
+      { path: 'gestioncampeonatos/:nombre', name:'campeonato' ,component: () => import('pages/Campeonato.vue'), props: true },
     ]
   },
   {
@@ -17,9 +18,9 @@ const routes = [
   },
   {
     path: '/:user',
-    component: () => import('layouts/User.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'campeonato', component: () => import('src/pages/Campeonato.vue') },
+      { path: '', component: () => import('src/pages/Usuario.vue') },
     ],
     meta: { requiresAuth: true },
   },

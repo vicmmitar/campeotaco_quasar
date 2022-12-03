@@ -51,6 +51,19 @@ export function setTipo_UsuarioReg({ commit }, valor) {
 export function setRows({ commit }, valor) {
   commit("SET_ROWS", valor);
 }
+export function setSeleccionado({ commit }, valor) {
+  commit("SET_SELECCIONADO", valor);
+}
+//Datos Tabla
+export function setIdCampGest({ commit }, valor) {
+  commit("SET_IDCAMPGEST", valor);
+}
+export function setRowsE({ commit }, valor) {
+  commit("SET_ROWSE", valor);
+}
+export function setSeleccionadoE({ commit }, valor) {
+  commit("SET_SELECCIONADOE", valor);
+}
 
 import axios from "axios";
 import { Notify } from "quasar";
@@ -113,7 +126,7 @@ export async function logout({ commit }) {
     .catch(function (error) {
       console.log(error);
       console.log(error.response.status);
-      if(error.response.status==401){
+      if (error.response.status == 401) {
         commit("SET_LOGEADO", false);
         commit("SET_USUARIOLOGEADO", null);
       }
@@ -191,7 +204,8 @@ export async function actualizarTabla({ commit }) {
       user: usuario.user,
     },
     headers: {
-      Authorization: "Bearer " + this.getters["autenticacion/getToken"].access_token,
+      Authorization:
+        "Bearer " + this.getters["autenticacion/getToken"].access_token,
     },
   })
     .then(function (response) {
@@ -201,4 +215,29 @@ export async function actualizarTabla({ commit }) {
     .catch(function (error) {
       console.log(error);
     });
+}
+
+export async function eliminarFila({ commit }) {
+  let fila = JSON.parse(JSON.stringify(this.getters["autenticacion/getSeleccionado"]));
+  console.log(fila.pop().idcampeonato);
+  let id = await fila.pop().idcampeonato;
+  console.log(id);
+  let url = this.getters["autenticacion/getIp"] + "campeonato/destroy/" + id;
+  await axios({
+    method: "get",
+    url: url,
+    headers: {
+      Authorization: "Bearer " + this.getters["autenticacion/getToken"].access_token,
+    },
+  })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+export function actualizarTablaEquipos({ commit }) {
+  console.log(this.getters["autenticacion/getIdCampGest"]);
 }

@@ -46,7 +46,20 @@ export function getCelularReg (state) {
 export function getTipo_UsuarioReg (state) {
     return state.tipo_usuario;
 }
-//Datos de la tabla
+//Datos de la tabla Cameponatos
 export function getRows (state) {
     return state.rows;
+}
+export function getSeleccionado (state) {
+    return state.seleccionado;
+}
+//Datos de la tabla Equipos
+export function getIdCampGest (state) {
+    return state.idCampGest;
+}
+export function getRowsE (state) {
+    return state.rowsE;
+}
+export function getSeleccionadoE (state) {
+    return state.seleccionadoE;
 }

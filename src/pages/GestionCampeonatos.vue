@@ -1,13 +1,13 @@
 <template>
   <div class="q-pa-md q-gutter-y-md column items-center">
     <q-btn-group push>
-      <q-btn
+      <!-- <q-btn
         push
         label="Consultar"
         icon="cloud_download"
         color="primary"
         @click="actualizar"
-      />
+      /> -->
       <q-btn
         push
         label="Crear"
@@ -21,6 +21,7 @@
         icon="visibility"
         color="secondary"
         :disable="seleccionado == '' ? true : false"
+        @click="irCampeonato"
       />
       <q-btn
         push
@@ -61,9 +62,7 @@
       </q-input>
     </template>
   </q-table>
-  <div class="q-mt-md">
-      Selected: {{ JSON.stringify(selected) }}
-    </div>
+  <div class="q-mt-md">Selected: {{ JSON.stringify(seleccionado) }}</div>
 </template>
 
 <script>
@@ -98,7 +97,6 @@ export default {
   components: { CrearCampeonato },
   setup() {
     return {
-      seleccionado: ref([]),
       filter: ref(""),
       card: ref(false),
       columns,
@@ -146,6 +144,22 @@ export default {
         return this.$store.dispatch("autenticacion/setRows", valor);
       },
     },
+    seleccionado: {
+      get() {
+        return this.$store.getters["autenticacion/getSeleccionado"];
+      },
+      set(valor) {
+        return this.$store.dispatch("autenticacion/setSeleccionado", valor);
+      },
+    },
+    idCampGest: {
+      get() {
+        return this.$store.getters["autenticacion/getIdCampGest"];
+      },
+      set(valor) {
+        return this.$store.dispatch("autenticacion/setIdCampGest", valor);
+      },
+    },
   },
   created() {
     if (!this.logeado) {
@@ -157,15 +171,21 @@ export default {
       this.$router.push("/login");
     }
   },
-  async mounted() {},
+  async mounted() {
+    this.seleccionado = [];
+    await this.$store.dispatch("autenticacion/actualizarTabla");
+  },
   methods: {
     async actualizar() {
       loading = true;
       await this.$store.dispatch("autenticacion/actualizarTabla");
       loading = false;
     },
-    async eliminarSeleccion(){
-      let url = this.ip + "campeonato/destroy/"+this.seleccionado.idcampeonato;
+    async eliminarSeleccion() {
+      let fila = JSON.parse(JSON.stringify(this.seleccionado));
+      let id = await fila.pop().idcampeonato;
+      //console.log(id);
+      let url = this.ip + "campeonato/destroy/" + id;
       await axios({
         method: "get",
         url: url,
@@ -179,7 +199,15 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
-        this.actualizar();
+      this.actualizar();
+    },
+    async irCampeonato() {
+      let fila = JSON.parse(JSON.stringify(this.seleccionado));
+      fila = await fila.pop();
+      let nombre = fila.nombre;
+      let idcampeonato = fila.idcampeonato;
+      this.idCampGest = idcampeonato;
+      this.$router.push({name: 'campeonato', params: {nombre, idcampeonato}});
     }
     /* async actualizarTabla() {
       loading = true;

@@ -1,10 +1,11 @@
 <template>
   <div class="q-pa-md q-gutter-y-md column items-center">
-    <h4>Gestionar {{nombre}}</h4>
+    <h4>Gestionar {{ nombre }}</h4>
+    <h5>Fecha Limite de Inscripcion: <span style="color: red;">{{fecha_limite_inscripcion}}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Costo de Inscripción: <span style="color: blue;">{{costo_inscripcion}}</span> BS</h5>
     <q-btn-group push>
       <q-btn
         push
-        label="Crear"
+        label="Inscribir"
         icon="add"
         color="primary"
         @click="card = true"
@@ -14,21 +15,21 @@
         label="Gestionar"
         icon="visibility"
         color="secondary"
-        :disable="seleccionado == '' ? true : false"
-        @click="irCampeonato"
+        :disable="seleccionadoE == '' ? true : false"
+        @click="irEquipo"
       />
       <q-btn
         push
         label="Eliminar"
         icon="delete"
         color="deep-orange"
-        :disable="seleccionado == '' ? true : false"
+        :disable="seleccionadoE == '' ? true : false"
         @click="eliminarSeleccion"
       />
     </q-btn-group>
 
     <q-dialog v-model="card" @hide="actualizar">
-      <crear-campeonato />
+      <inscribir-equipo />
     </q-dialog>
   </div>
   <q-table
@@ -63,33 +64,39 @@
 import { useQuasar } from "quasar";
 import { ref } from "vue";
 import axios from "axios";
-import CrearCampeonato from "src/components/CrearCampeonato.vue";
+import InscribirEquipo from "src/components/InscribirEquipo.vue";
 
 const columns = [
   {
     name: "desc",
     required: true,
-    label: "Campeonato",
+    label: "Equipo",
     align: "left",
     field: (row) => row.nombre,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: "gestion",
+    name: "comunidad",
     align: "center",
-    label: "Gestion",
-    field: "gestion",
+    label: "Comunidad",
+    field: "comunidad",
     sortable: true,
   },
-  { name: "categoria", label: "Categoria", field: "categoria", sortable: true },
-  { name: "sede", label: "Sede", field: "sede" },
+  { name: "bandera", label: "Bandera", field: "bandera", sortable: true },
+  { name: "fecha", label: "Fecha", field: row => row.inscrito_a.fecha},
+  { name: "inscripcion", label: "Inscripcion", field: row => row.inscrito_a.inscripcion},
 ];
 
 let loading = ref(false);
 export default {
-  components: { CrearCampeonato },
-  props: ['idcampeonato', 'nombre'],
+  components: { InscribirEquipo },
+  props: {
+    titulo: String,
+    nombre: String,
+    costo_inscripcion: String,
+    fecha_limite_inscripcion: String,
+  },
   setup() {
     return {
       filter: ref(""),
@@ -167,7 +174,7 @@ export default {
     }
   },
   async mounted() {
-    this.seleccionado = [];
+    this.seleccionadoE = [];
     await this.$store.dispatch("autenticacion/actualizarTablaEquipos");
   },
   methods: {
@@ -177,16 +184,16 @@ export default {
       loading = false;
     },
     async eliminarSeleccion() {
-      let fila = JSON.parse(JSON.stringify(this.seleccionado));
-      let id = await fila.pop().idcampeonato;
+      let fila = JSON.parse(JSON.stringify(this.seleccionadoE));
+      let id = await fila.pop().idequipo;
       //console.log(id);
       let url = this.ip + "campeonato/destroy/" + id;
       await axios({
         method: "get",
         url: url,
-        headers: {
+        /* headers: {
           Authorization: "Bearer " + this.token.access_token,
-        },
+        }, */
       })
         .then(function (response) {
           console.log(response);
@@ -196,42 +203,18 @@ export default {
         });
       this.actualizar();
     },
-    async irCampeonato() {
-      let fila = JSON.parse(JSON.stringify(this.seleccionado));
+    async irEquipo() {
+      let fila = JSON.parse(JSON.stringify(this.seleccionadoE));
       fila = await fila.pop();
       let nombre = fila.nombre;
-      let idcampeonato = fila.idcampeonato;
-      this.idCampGest = idcampeonato;
-      this.$router.push({name: 'campeonato', params: {nombre, idcampeonato}});
-    }
-    /* async actualizarTabla() {
-      loading = true;
-      console.log("actualizar");
-      let url = this.ip + "campeonato";
-      await axios({
-        method: "post",
-        url: url,
-        data: {
-          user: this.usuarioLogeado.user,
-        },
-        headers: {
-          Authorization: "Bearer " + this.token.access_token,
-        },
-      })
-        .then(function (response) {
-          //console.log("antes ");
-          //console.log(this.rows);
-          this.rows = response.data;
-          //console.log("despues ");
-          //console.log(this.rows);
-
-          loading = false;
-          console.log(loading);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }, */
+      let idequipo = fila.idequipo;
+      let titulo2 = nombre.replace(/\s+/g, '');
+      //this.idCampGest = idcampeonato;
+      this.$router.push({
+        name: "equipo",
+        params: { this.titulo, nombre, idequipo },
+      });
+    },
   },
 };
 </script>

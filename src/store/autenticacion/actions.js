@@ -238,6 +238,29 @@ export async function eliminarFila({ commit }) {
     });
 }
 
-export function actualizarTablaEquipos({ commit }) {
+export async function actualizarTablaEquipos({ commit }) {
+  console.log("actions actualizar tabla equipos");
   console.log(this.getters["autenticacion/getIdCampGest"]);
+  let url = this.getters["autenticacion/getIp"] + "campeonatoequipos";
+  let idcampeonato = this.getters["autenticacion/getIdCampGest"];
+  await axios({
+    method: "post",
+    url: url,
+    data: {
+      idcampeonato,
+    },
+    /* headers: {
+      Authorization:
+        "Bearer " + this.getters["autenticacion/getToken"].access_token,
+    }, */
+  })
+    .then(function (response) {
+      let equipos = response.data;
+      equipos = equipos.pop().equipos;
+      console.log(equipos);
+      commit("SET_ROWSE", equipos);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 }

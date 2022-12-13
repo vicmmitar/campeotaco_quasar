@@ -205,9 +205,11 @@ export default {
       let fila = JSON.parse(JSON.stringify(this.seleccionado));
       fila = await fila.pop();
       let nombre = fila.nombre;
-      let idcampeonato = fila.idcampeonato;
-      this.idCampGest = idcampeonato;
-      this.$router.push({name: 'campeonato', params: {nombre, idcampeonato}});
+      let titulo = nombre.replace(/\s+/g, '');
+      let costo_inscripcion = fila.costo_inscripcion;
+      let fecha_limite_inscripcion = fila.fecha_limite_inscripcion;
+      this.idCampGest = fila.idcampeonato;
+      this.$router.push({name: 'campeonato', params: {titulo, nombre, costo_inscripcion, fecha_limite_inscripcion}});
     }
     /* async actualizarTabla() {
       loading = true;

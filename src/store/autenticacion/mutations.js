@@ -64,3 +64,7 @@ export function SET_ROWSE (state, nuevoValor) {
 export function SET_SELECCIONADOE (state, nuevoValor) {
     state.seleccionadoE = nuevoValor;
 }
+//Datos de la tabla Fixture
+export function SET_LIST (state, nuevoValor) {
+    state.list = nuevoValor;
+}

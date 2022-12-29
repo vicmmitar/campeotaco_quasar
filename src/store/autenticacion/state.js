@@ -24,5 +24,7 @@ export default function () {
     idCampGest: "",
     rowsE: [],
     seleccionadoE: [],
+    //tablaFixture
+    list: [],
   }
 }

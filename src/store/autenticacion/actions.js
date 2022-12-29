@@ -64,6 +64,10 @@ export function setRowsE({ commit }, valor) {
 export function setSeleccionadoE({ commit }, valor) {
   commit("SET_SELECCIONADOE", valor);
 }
+//Datos Tabla Fixture
+export function setList({ commit }, valor) {
+  commit("SET_LIST", valor);
+}
 
 import axios from "axios";
 import { Notify } from "quasar";
@@ -218,7 +222,9 @@ export async function actualizarTabla({ commit }) {
 }
 
 export async function eliminarFila({ commit }) {
-  let fila = JSON.parse(JSON.stringify(this.getters["autenticacion/getSeleccionado"]));
+  let fila = JSON.parse(
+    JSON.stringify(this.getters["autenticacion/getSeleccionado"])
+  );
   console.log(fila.pop().idcampeonato);
   let id = await fila.pop().idcampeonato;
   console.log(id);
@@ -227,7 +233,8 @@ export async function eliminarFila({ commit }) {
     method: "get",
     url: url,
     headers: {
-      Authorization: "Bearer " + this.getters["autenticacion/getToken"].access_token,
+      Authorization:
+        "Bearer " + this.getters["autenticacion/getToken"].access_token,
     },
   })
     .then(function (response) {
@@ -256,9 +263,33 @@ export async function actualizarTablaEquipos({ commit }) {
   })
     .then(function (response) {
       let equipos = response.data;
+      console.log(response.data);
       equipos = equipos.pop().equipos;
       console.log(equipos);
       commit("SET_ROWSE", equipos);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+export async function actualizarTablaFixture({ commit }) {
+  let url = this.getters["autenticacion/getIp"] + "rolencuentro/partidos";
+  let idcampeonato = this.getters["autenticacion/getIdCampGest"];
+  await axios({
+    method: "post",
+    url: url,
+    data: {
+      idcampeonato,
+    },
+    /* headers: {
+        Authorization: "Bearer " + this.token.access_token,
+      }, */
+  })
+    .then(function (response) {
+      let fixture = response.data;
+      console.log(fixture);
+      commit("SET_LIST", fixture);
     })
     .catch(function (error) {
       console.log(error);

@@ -1,7 +1,12 @@
 <template>
   <div class="q-pa-md q-gutter-y-md column items-center">
-    <h4>Gestionar {{ nombre }}</h4>
-    <h5>Fecha Limite de Inscripcion: <span style="color: red;">{{fecha_limite_inscripcion}}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Costo de Inscripción: <span style="color: blue;">{{costo_inscripcion}}</span> BS</h5>
+    <h4>Gestionar {{ nombre1 }}</h4>
+    <h5>
+      Fecha Limite de Inscripcion:
+      <span style="color: red">{{ fecha_limite_inscripcion1 }}</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Costo de Inscripción:
+      <span style="color: blue">{{ costo_inscripcion1 }}</span> BS
+    </h5>
     <q-btn-group push>
       <q-btn
         push
@@ -84,18 +89,22 @@ const columns = [
     sortable: true,
   },
   { name: "bandera", label: "Bandera", field: "bandera", sortable: true },
-  { name: "fecha", label: "Fecha", field: row => row.inscrito_a.fecha},
-  { name: "inscripcion", label: "Inscripcion", field: row => row.inscrito_a.inscripcion},
+  { name: "fecha", label: "Fecha", field: (row) => row.inscrito_a.fecha },
+  {
+    name: "inscripcion",
+    label: "Inscripcion",
+    field: (row) => row.inscrito_a.inscripcion,
+  },
 ];
 
 let loading = ref(false);
 export default {
   components: { InscribirEquipo },
   props: {
-    titulo: String,
-    nombre: String,
-    costo_inscripcion: String,
-    fecha_limite_inscripcion: String,
+    titulo1: String,
+    nombre1: String,
+    costo_inscripcion1: String,
+    fecha_limite_inscripcion1: String,
   },
   setup() {
     return {
@@ -208,11 +217,11 @@ export default {
       fila = await fila.pop();
       let nombre = fila.nombre;
       let idequipo = fila.idequipo;
-      let titulo2 = nombre.replace(/\s+/g, '');
+      let titulo2 = nombre.replace(/\s+/g, "");
       //this.idCampGest = idcampeonato;
       this.$router.push({
         name: "equipo",
-        params: { this.titulo, nombre, idequipo },
+        params: { titulo2, nombre, idequipo },
       });
     },
   },

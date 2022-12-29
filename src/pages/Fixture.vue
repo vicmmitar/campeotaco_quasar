@@ -3,34 +3,67 @@
     <q-markup-table class="col-12">
       <thead>
         <tr>
-          <th class="text-left"></th>
-          <th class="text-left">Name</th>
-          <th class="text-center">Description</th>
+          <th class="text-center">Fecha</th>
+          <th class="text-center">Hora Inicio</th>
+          <th class="text-center">Hora Fin</th>
+          <th class="text-center">Equipo</th>
+          <th class="text-center">VS.</th>
+          <th class="text-center">Equipo</th>
         </tr>
       </thead>
-      <draggable v-model="list" tag="tbody">
-        <tr v-for="el in list" :key="el.id">
-          <td>
-            <q-icon name="drag_handle" />
-          </td>
+      <draggable
+        v-model="list"
+        tag="tbody"
+        item-key="idrolencuentro"
+        @start="drag = true"
+        @end="drag = false"
+
+      >
+      <template #item="{ element }">
+        <tr>
           <td>
             <span>
-              {{ el.name }}
+              {{ (new Date(element.fecha)).getUTCDate() +"-"+ (new Date(element.fecha)).getUTCMonth()+1 +"-"+ (new Date(element.fecha)).getUTCFullYear()}}
             </span>
           </td>
           <td>
             <span>
-              {{ el.description }}
+              {{ (new Date(element.hora_inicio)).getUTCHours() +":"+ (new Date(element.hora_inicio)).getUTCMinutes() }}
+            </span>
+          </td>
+          <td>
+            <span>
+              {{ (new Date(element.hora_fin)).getUTCHours() +":"+ (new Date(element.hora_fin)).getUTCMinutes() }}
+            </span>
+          </td>
+          <td>
+            <span>
+              {{ element.equipo_idequipo }}
+            </span>
+          </td>
+          <td>
+            <span> vs. </span>
+          </td>
+          <td>
+            <span>
+              {{ element.equipo_idequipo1 }}
             </span>
           </td>
         </tr>
+      </template>
       </draggable>
     </q-markup-table>
   </q-page>
 </template>
 
 <script>
+import { ref } from "vue";
+import draggable from "vuedraggable";
+
 export default {
+  components: {
+    draggable,
+  },
   setup() {
     const nombre = ref(null);
     const comunidad = ref(null);
@@ -42,7 +75,7 @@ export default {
       comunidad,
       bandera,
       inscripcion,
-      q,
+      drag: false,
     };
   },
   computed: {
@@ -78,25 +111,17 @@ export default {
         return this.$store.dispatch("autenticacion/setIdCampGest", valor);
       },
     },
+    list: {
+      get() {
+        return this.$store.getters["autenticacion/getList"];
+      },
+      set(valor) {
+        return this.$store.dispatch("autenticacion/setList", valor);
+      },
+    },
   },
   async created() {
-    let url = this.ip + "rolencuentro/partidos";
-    await axios({
-      method: "post",
-      url: url,
-      data: {
-        idcampeonato: this.idCampGest,
-      }
-      /* headers: {
-        Authorization: "Bearer " + this.token.access_token,
-      }, */
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    await this.$store.dispatch("autenticacion/actualizarTablaFixture");
   },
 };
 </script>

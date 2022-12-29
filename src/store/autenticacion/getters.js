@@ -63,3 +63,7 @@ export function getRowsE (state) {
 export function getSeleccionadoE (state) {
     return state.seleccionadoE;
 }
+//Datos de la tabla Fixture
+export function getList (state) {
+    return state.list;
+}

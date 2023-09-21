@@ -13,46 +13,65 @@
       </thead>
       <draggable
         v-model="list"
+        :options="{handle: '.no-draggable'}"
         tag="tbody"
         item-key="idrolencuentro"
         @start="drag = true"
         @end="drag = false"
-
       >
-      <template #item="{ element }">
-        <tr>
-          <td>
-            <span>
-              {{ (new Date(element.fecha)).getUTCDate() +"-"+ (new Date(element.fecha)).getUTCMonth()+1 +"-"+ (new Date(element.fecha)).getUTCFullYear()}}
-            </span>
-          </td>
-          <td>
-            <span>
-              {{ (new Date(element.hora_inicio)).getUTCHours() +":"+ (new Date(element.hora_inicio)).getUTCMinutes() }}
-            </span>
-          </td>
-          <td>
-            <span>
-              {{ (new Date(element.hora_fin)).getUTCHours() +":"+ (new Date(element.hora_fin)).getUTCMinutes() }}
-            </span>
-          </td>
-          <td>
-            <span>
-              {{ element.equipo_idequipo }}
-            </span>
-          </td>
-          <td>
-            <span> vs. </span>
-          </td>
-          <td>
-            <span>
-              {{ element.equipo_idequipo1 }}
-            </span>
-          </td>
-        </tr>
-      </template>
+        <template #item="{ element }">
+          <tr>
+            <td class="no-draggable">
+              <!-- <span>
+                {{
+                  new Date(element.fecha).getUTCDate() +
+                  "-" +
+                  new Date(element.fecha).getUTCMonth() +
+                  1 +
+                  "-" +
+                  new Date(element.fecha).getUTCFullYear()
+                }}
+              </span> -->
+              <span>
+                1
+              </span>
+            </td>
+            <td class="no-draggable">
+              <span>
+                {{
+                  new Date(element.hora_inicio).getUTCHours() +
+                  ":" +
+                  new Date(element.hora_inicio).getUTCMinutes()
+                }}
+              </span>
+            </td>
+            <td class="no-draggable">
+              <span>
+                {{
+                  new Date(element.hora_fin).getUTCHours() +
+                  ":" +
+                  new Date(element.hora_fin).getUTCMinutes()
+                }}
+              </span>
+            </td>
+            <td>
+              <span>
+                {{ element.equipo_idequipo }}
+              </span>
+            </td>
+            <td>
+              <span> vs. </span>
+            </td>
+            <td>
+              <span>
+                {{ element.equipo_idequipo1 }}
+              </span>
+            </td>
+          </tr>
+        </template>
       </draggable>
     </q-markup-table>
+    <div class="q-mt-md">LISTA: {{ JSON.stringify(list) }}</div>
   </q-page>
 </template>
 

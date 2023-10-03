@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    EQUIPO
+    <!-- content -->
   </q-page>
 </template>
 

@@ -67,3 +67,6 @@ export function getSeleccionadoE (state) {
 export function getList (state) {
     return state.list;
 }
+export function getList1 (state) {
+  return state.list1;
+}

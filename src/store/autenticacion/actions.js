@@ -68,6 +68,9 @@ export function setSeleccionadoE({ commit }, valor) {
 export function setList({ commit }, valor) {
   commit("SET_LIST", valor);
 }
+export function setList1({ commit }, valor) {
+  commit("SET_LIST1", valor);
+}
 
 import axios from "axios";
 import { Notify } from "quasar";
@@ -274,7 +277,7 @@ export async function actualizarTablaEquipos({ commit }) {
 }
 
 export async function actualizarTablaFixture({ commit }) {
-  let url = this.getters["autenticacion/getIp"] + "rolencuentro/partidos";
+  let url = this.getters["autenticacion/getIp"] + "rolencuentro/partidosnojugados";
   let idcampeonato = this.getters["autenticacion/getIdCampGest"];
   await axios({
     method: "post",
@@ -290,6 +293,29 @@ export async function actualizarTablaFixture({ commit }) {
       let fixture = response.data;
       console.log(fixture);
       commit("SET_LIST", fixture);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+export async function actualizarTablaJugados ({ commit }) {
+  let url = this.getters["autenticacion/getIp"] + "rolencuentro/partidosyajugados";
+  let idcampeonato = this.getters["autenticacion/getIdCampGest"];
+  await axios({
+    method: "post",
+    url: url,
+    data: {
+      idcampeonato,
+    },
+    /* headers: {
+        Authorization: "Bearer " + this.token.access_token,
+      }, */
+  })
+    .then(function (response) {
+      let fixture = response.data;
+      console.log(fixture);
+      commit("SET_LIST1", fixture);
     })
     .catch(function (error) {
       console.log(error);

@@ -1,6 +1,6 @@
 export default function () {
   return {
-    ip: 'http://localhost:8000/api/',
+    ip: 'http://192.168.1.6:8000/api/',
     logeado: false,
     token: null,
     usuarioLogeado: null,
@@ -26,5 +26,6 @@ export default function () {
     seleccionadoE: [],
     //tablaFixture
     list: [],
+    list1: [],
   }
 }

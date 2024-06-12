@@ -68,3 +68,6 @@ export function SET_SELECCIONADOE (state, nuevoValor) {
 export function SET_LIST (state, nuevoValor) {
     state.list = nuevoValor;
 }
+export function SET_LIST1 (state, nuevoValor) {
+  state.list1 = nuevoValor;
+}

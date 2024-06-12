@@ -1,100 +1,95 @@
 <template>
-  <q-page padding>
-    <q-markup-table class="col-12">
-      <thead>
-        <tr>
-          <th class="text-center">Fecha</th>
-          <th class="text-center">Hora Inicio</th>
-          <th class="text-center">Hora Fin</th>
-          <th class="text-center">Equipo</th>
-          <th class="text-center">VS.</th>
-          <th class="text-center">Equipo</th>
-        </tr>
-      </thead>
-      <draggable
-        v-model="list"
-        :options="{handle: '.no-draggable'}"
-        tag="tbody"
-        item-key="idrolencuentro"
-        @start="drag = true"
-        @end="drag = false"
+  <div class="row justify-between items-center content-center">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 q-pa-sm">
+      <q-table
+        :table-style="'counter-reset: cssRowCounter ' + ';'"
+        bordered
+        title="Partidos Jugados"
+        dense
+        :rows="list1"
+        :columns="columns"
+        row-key="name"
+        v-model:pagination="pagination"
+        hide-pagination
       >
-        <template #item="{ element }">
-          <tr>
-            <td class="no-draggable">
-              <!-- <span>
-                {{
-                  new Date(element.fecha).getUTCDate() +
-                  "-" +
-                  new Date(element.fecha).getUTCMonth() +
-                  1 +
-                  "-" +
-                  new Date(element.fecha).getUTCFullYear()
-                }}
-              </span> -->
-              <span>
-                1
-              </span>
-            </td>
-            <td class="no-draggable">
-              <span>
-                {{
-                  new Date(element.hora_inicio).getUTCHours() +
-                  ":" +
-                  new Date(element.hora_inicio).getUTCMinutes()
-                }}
-              </span>
-            </td>
-            <td class="no-draggable">
-              <span>
-                {{
-                  new Date(element.hora_fin).getUTCHours() +
-                  ":" +
-                  new Date(element.hora_fin).getUTCMinutes()
-                }}
-              </span>
-            </td>
-            <td>
-              <span>
-                {{ element.equipo_idequipo }}
-              </span>
-            </td>
-            <td>
-              <span> vs. </span>
-            </td>
-            <td>
-              <span>
-                {{ element.equipo_idequipo1 }}
-              </span>
-            </td>
-          </tr>
+        <template v-slot:body-cell-row-number>
+          <q-td><span class="rowNumber" /> </q-td>
         </template>
-      </draggable>
-    </q-markup-table>
-    <div class="q-mt-md">LISTA: {{ JSON.stringify(list) }}</div>
-  </q-page>
+      </q-table>
+      <div class="row justify-center q-mt-md">
+        <q-pagination
+          v-model="pagination.page"
+          color="grey-8"
+          :max="pagesNumber"
+          size="sm"
+        />
+      </div>
+      <!-- <q-card class="my-card">
+        <q-card-section> LISTA: {{ JSON.stringify(list1) }} </q-card-section>
+      </q-card> -->
+      <!-- <div class="col-6">LISTA: {{ JSON.stringify(list1) }}</div> -->
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 q-pa-sm">
+      <q-table
+        :table-style="'counter-reset: cssRowCounter ' + ';'"
+        bordered
+        title="Rol de partidos"
+        dense
+        :rows="list2"
+        :columns="columns"
+        row-key="name"
+        v-model:pagination="pagination1"
+        hide-pagination
+      >
+        <template v-slot:body-cell-row-number>
+          <q-td><span class="rowNumber" /> </q-td>
+        </template>
+      </q-table>
+      <div class="row justify-center q-mt-md">
+        <q-pagination
+          v-model="pagination1.page"
+          color="grey-8"
+          :max="pagesNumber1"
+          size="sm"
+        />
+      </div>
+      <!-- <q-card class="my-card">
+        <q-card-section> LISTA: {{ JSON.stringify(list2) }} </q-card-section>
+      </q-card> -->
+      <!-- <div class="col-6">LISTA: {{ JSON.stringify(list1) }}</div> -->
+    </div>
+  </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import draggable from "vuedraggable";
 
 export default {
-  components: {
-    draggable,
-  },
   setup() {
-    const nombre = ref(null);
-    const comunidad = ref(null);
-    const bandera = ref(null);
-    const inscripcion = ref(null);
+    const pagination = ref({
+      sortBy: "desc",
+      descending: false,
+      page: 1,
+      rowsPerPage: 3,
+      //rowsNumber: 10
+    });
+    const pagination1 = ref({
+      sortBy: "desc",
+      descending: false,
+      page: 1,
+      rowsPerPage: 3,
+      //rowsNumber: 10
+    });
 
     return {
-      nombre,
-      comunidad,
-      bandera,
-      inscripcion,
+      columns,
       drag: false,
+      pagination,
+      pagination1,
+      pagesNumber: 3,
+      pagesNumber1: 3,
+      //pagesNumber: computed(() => Math.ceil(list.length / pagination.value.rowsPerPage)),
     };
   },
   computed: {
@@ -130,7 +125,7 @@ export default {
         return this.$store.dispatch("autenticacion/setIdCampGest", valor);
       },
     },
-    list: {
+    list1: {
       get() {
         return this.$store.getters["autenticacion/getList"];
       },
@@ -138,9 +133,66 @@ export default {
         return this.$store.dispatch("autenticacion/setList", valor);
       },
     },
+    list2: {
+      get() {
+        return this.$store.getters["autenticacion/getList1"];
+      },
+      set(valor) {
+        return this.$store.dispatch("autenticacion/setList1", valor);
+      },
+    },
+    equipos: {
+      get() {
+        return this.$store.getters["autenticacion/getRows"];
+      },
+      set(valor) {
+        return this.$store.dispatch("autenticacion/setRows", valor);
+      },
+    },
   },
   async created() {
     await this.$store.dispatch("autenticacion/actualizarTablaFixture");
+    await this.$store.dispatch("autenticacion/actualizarTablaJugados");
   },
 };
+
+const columns = [
+  {
+    name: "row-number",
+    required: true,
+    label: "#",
+    align: "left",
+    sortable: false,
+  },
+  {
+    name: "Equipo1",
+    required: true,
+    label: "Equipo",
+    align: "left",
+    field: (row) => row.equipo.nombre,
+    format: (val) => `${val}`,
+  },
+  {
+    name: "Versus",
+    required: false,
+    label: "vs.",
+    align: "left",
+    field: (row) => "vs.",
+    format: (val) => `${val}`,
+  },
+  {
+    name: "Equipo2",
+    required: true,
+    label: "Equipo",
+    align: "left",
+    field: (row) => row.equipo1.nombre,
+    format: (val) => `${val}`,
+  },
+];
 </script>
+<style>
+.rowNumber::before {
+  counter-increment: cssRowCounter;
+  content: counter(cssRowCounter);
+}
+</style>
